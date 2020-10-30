@@ -6,6 +6,7 @@
 #include <sys/time.h>
 
 #define MATCHES 200
+#define SLEEPTIME 400
 
 int gameboard[MATCHES]; // 每局的胜负情况
 long int time_p1[MATCHES];   // 玩家一每局所用的时间
@@ -27,6 +28,14 @@ struct startmsg {
     long int msgtype;
     int se; // se=1: 开始 se=0: 游戏结束
 };
+
+void Sleep(int ms)
+{
+	struct timeval delay;
+	delay.tv_sec = 0;
+	delay.tv_usec = ms * 1000;
+	select(0, NULL, NULL, NULL, &delay);
+}
 
 // 用来判断哪一方赢得比赛
 // 返回的数 >0: player1赢 =0: 平局 <0: player2赢
@@ -123,7 +132,7 @@ int main() {
         
         // 本次循环结束
         i++;
-        sleep(1);
+        Sleep(SLEEPTIME);
     }
 
     // 发出比赛结束的口令

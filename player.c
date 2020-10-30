@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 char *CONDITIONS[] = {"布", "剪刀", "石头"};    // 对照
 
@@ -25,6 +26,7 @@ struct startmsg {
 int main() {
     key_t key;
     int player_id;
+    time_t t;
 
     pid_t fpid;
     fpid = fork();
@@ -35,12 +37,12 @@ int main() {
         // 子进程 -> 玩家一
         key = ftok("/tmp", 77);
         player_id = msgget(key, IPC_CREAT | 0666);
-        srand(1);
+        srand((unsigned)time(&t)+1);
     } else {
         // 父进程 -> 玩家二
         key = ftok("/tmp", 88);
         player_id = msgget(key, IPC_CREAT | 0666);
-        srand(2);
+        srand((unsigned)time(&t));
     }
 
     if (player_id == -1) {
@@ -75,9 +77,9 @@ int main() {
         
         // 各自的出拳
         if (fpid == 0)
-            printf("玩家一：我出%s\n", CONDITIONS[finger]);
+            printf("【玩家一】：我出%s\n", CONDITIONS[finger]);
         else
-            printf("玩家二：我出%s\n", CONDITIONS[finger]);
+            printf("【玩家二】：我出%s\n", CONDITIONS[finger]);
 
         if (msgsnd(player_id, (void *)&gmsg, sizeof(mydata), 0) < 0) {
             fprintf(stderr, "Error: failed to send message[player]\n");
