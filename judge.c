@@ -6,7 +6,7 @@
 #include <sys/time.h>
 
 #define MATCHES 200
-#define SLEEPTIME 400
+#define SLEEPTIME 200
 
 int gameboard[MATCHES]; // 每局的胜负情况
 long int time_p1[MATCHES];   // 玩家一每局所用的时间
@@ -48,12 +48,11 @@ int judge(int ans1, int ans2) {
 }
 
 // 计算平均时间
-int get_average(long int arr[]) {
+double get_average(long int arr[]) {
     long int ave = 0;
-    unsigned sz = sizeof(arr)/sizeof(long int);
-    for (int i = 0; i < sz; ++i)
+    for (int i = 0; i < MATCHES; ++i)
         ave += arr[i];
-    return ave * 1.0 / sz;
+    return ave * 1.0 / MATCHES;
 }
 
 int main() {
@@ -168,6 +167,6 @@ int main() {
         printf("玩家二赢得整场比赛\n");
     
     // 打印统计结果
-    printf("\n玩家一的平均时间：%.2f\t玩家二的平均时间：%.2f\n", get_average(time_p1), get_average(time_p2));
+    printf("\n玩家一的平均时间：%.2f us\t玩家二的平均时间：%.2f us\n", get_average(time_p1), get_average(time_p2));
     return 0;
 }
