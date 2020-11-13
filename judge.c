@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-#define MATCHES 200
+#define MATCHES 100
 #define SLEEPTIME 200
 
 int gameboard[MATCHES]; // 每局的胜负情况
